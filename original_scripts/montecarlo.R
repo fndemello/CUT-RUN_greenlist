@@ -5,32 +5,37 @@ library(foreach)
 library("doRNG")
 options(digits = 15)
 
-setwd("/work2/group/prostata/metodo_normalizacao/")
-
 
 # Input data
-total_counts <- read.delim(file='5.Quant/reordered.clean_over2Msamp_1k-bins.tsv',header=T,row.names=1)
-isAllowed <- read.delim(file='5.Quant/clean_bins_isAwayFromGene.tsv',header=F,row.names=NULL)
+raw_counts <- read.delim(file='')
+# Assumes bin count input as described in 'norm+entropy.R'
 
+isAllowed <- read.delim(file='')
+# Assumes binary vector of whether genomic bins are close to known genes (FALSE) or intergenic (TRUE);
+# this is used for simulating the filtering step described in our manuscript, but may be discarded
+# by future users if preferred. We considered a distance of at least 5kb for a bin to be intergenic.
+
+#####
 # Process data
-target_counts <- total_counts[1:294825,]
-bincount <- 2949
-isAllowed <- isAllowed$V1
+target_counts <- raw_counts[1:294825,]
+# Similarly to 'threshold_test.R' we selected the 10% of bins with the lowest entropies to test the
+# normalization upon; here, they are placed as the first 294825 rows of our 'raw_counts' file to
+# simplify input. 
 
+bincount <- 2949
+# This variable refers to how many bins should be selected per Monte-Carlo run. 2949 refers to 0.1%
+# of non-empty bins in our pipeline.
 
 
 #####################
-# Test normalization function
+# Main test function
 myfun = function(test_counts, bincount, target_counts, isAllowed){
-  
-  # Random sampling
-  # test_counts <- total_counts[sample(1:nrow(total_counts),bincount,replace=F),]
-  
+
   # Test sampled bins as normalizers
   smm <- summary(
     apply(base::scale(target_counts, center = F, scale = 
                                 colSums(test_counts)/median(colSums(test_counts)))
-                  ,1,function(x) entropy(x,method='CS'))
+                  ,1,function(x) entropy(x,method='ML'))
   )
   v <- NULL
   v <- smm[3]
@@ -41,7 +46,7 @@ myfun = function(test_counts, bincount, target_counts, isAllowed){
   smm <- summary(
     apply(base::scale(target_counts, center = F, scale = 
                                 colSums(test_counts)/median(colSums(test_counts)))
-                  ,1,function(x) entropy(x,method='CS'))
+                  ,1,function(x) entropy(x,method='ML'))
   )
   v <- append(v, smm[3])
   v <- append(v, smm[5]-smm[2])
@@ -55,10 +60,11 @@ myfun = function(test_counts, bincount, target_counts, isAllowed){
 results <- NULL
 trials <- 100000
 preload <- 2000
-# To avoid passing the entire counts table to each worker, the
-# script pre-samples a set number of permutations at a time. Pre-
-# loading more sets at a time speeds computation, but consumes
-# more memory.
+###
+# To avoid passing the entire counts table to each worker thread, the script pre-samples 
+# a set number of permutations at a time, to then be passed to workers. Pre-loading more 
+# sets at a time speeds up computation, but consumes more memory.
+###
 
 # Make multithreading cluster
 cl <- makeCluster(20)
@@ -75,22 +81,22 @@ for (r in 1:(trials/preload)) {
   tests <- NULL
   intermediate_res <- NULL
   for (t in 1:preload) {
-    tests <- append(tests,list(total_counts[sample(1:nrow(total_counts),bincount,replace=F),]))
+    tests <- append(tests,list(raw_counts[sample(1:nrow(raw_counts),bincount,replace=F),]))
   }
-  intermediate_res <- foreach(i=tests, .combine = 'rbind',.packages = 'entropy',.noexport = c('total_counts','tests')) %dopar% {
+  intermediate_res <- foreach(i=tests, .combine = 'rbind',.packages = 'entropy',.noexport = c('raw_counts','tests')) %dopar% {
     myfun(i, bincount, target_counts, isAllowed)
   }
   results <- rbind(results, intermediate_res)
-  write.table(paste('Done:',r*preload,'of',trials,'||',Sys.time()-10800),file='6.Calculos/MC.progress.txt',quote=F)
 }
 
 end=Sys.time()
 timing = end-start
 timing
 stopCluster(cl)
+    
 results <- results[1:trials,1:4]
 colnames(results) <- c('Raw_median','Raw_IQR','Filtered_median','Filtered_IQR')
 rownames(results) <- c(1:trials)
 
-write.table(results,file='6.Calculos/MC.test_100kruns.tsv',quote=F,sep='\t')
-write.table(timing,file='6.Calculos/MC.test_timefor_100kruns.tsv',quote=F,row.names = F,col.names = F)
+write.table(results,file='') #Output file
+write.table(timing,file='') #Run duration output file; optional
