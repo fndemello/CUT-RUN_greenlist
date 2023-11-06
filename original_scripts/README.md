@@ -1,4 +1,4 @@
-# R script file
+# R script files
 
 This folder refers to the scripts used throughout the manuscript, for Greenlist creation 
 and testing, made available for the purpose of reproducibility. The original commit presents
