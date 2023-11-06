@@ -1,73 +1,77 @@
 # Load required libraries
 library(broman)
 library(entropy)
-#library(edgeR)
 library(ggplot2)
-options(mc.cores=16)
 
 
-# Gene expression data
-gene_data <- read.delim(file='5.CutnTag/3.Quant/nonempty_1k-bins.tsv',header=T,row.names=1)
+# Input bin counts
+raw_counts <- read.delim(file='') #Input file
+###
+# This script assumes that binning and sample quantification has already been previously performed;
+# formatting should feature rows as independent bins, and columns as samples. Counts should be
+# non-normalized, as quantile normalization is preffered. Removal of fully empty bins (ie. bins
+# without counts in any sample) is highly advised. We recommend deeptools' multiBamSummary 
+# for this quantification.
+###
+
+# Quantile normalize
+q_norm = broman::normalize(raw_counts)
+colnames(q_norm) = colnames(raw_counts)
+rownames(q_norm) = rownames(raw_counts)
+q_norm = write.table(q_norm,
+                    file='', #Output file
+                    quote=F,sep='\t')
+# Saves the quantile normalized values, if desired. Can be skipped.
 
 
-# Normalize
-q_norm = broman::normalize(gene_data)
-colnames(q_norm) = colnames(gene_data)
-rownames(q_norm) = rownames(gene_data)
-q_norm = write.table(q_norm,file='6.Calculos/qnorm_bins.tsv',quote=F,sep='\t')
+# Calculate Shannon entropy for each bin across all samples
+entropy_vals = apply(q_norm,1,function(x) entropy(x,method='ML'))
+summary(entropy_vals)
 
+                  
+entropy_vals = entropy_vals[!is.na(entropy_vals)]
+###
+# The entropy function will return 'NA' if empty bins are not removed, which affects the percentage-
+# based selection. Because of this, the above step removes null-entropy bins before continuing. 
+###
 
-# Calculate Shannon entropy for each gene across all samples
-q_entropy = apply(q_norm,1,function(x) entropy(x,method='ML'))
-
-
-# Print the calculated entropy values
-print(format(sort(q_entropy),scientific=F))
-
-summary(q_entropy)
-q_entropy = q_entropy[!is.na(q_entropy)]
-
+                     
 # Save files
 blist = apply(q_norm,1,function(x) median(x))
-bl1 = blist[blist>=quantile(blist,probs=0.99)]
-bl0.1 = blist[blist>=quantile(blist,probs=0.999)]
-top1=q_entropy[q_entropy>=quantile(q_entropy,probs=0.99)]
-top0.1=q_entropy[q_entropy>=quantile(q_entropy,probs=0.999)]
+bl_1 = blist[blist>=quantile(blist,probs=0.99)]
+bl_0.1 = blist[blist>=quantile(blist,probs=0.999)]
+gl_1=entropy_vals[entropy_vals>=quantile(entropy_vals,probs=0.99)]
+gl_0.1=entropy_vals[entropy_vals>=quantile(entropy_vals,probs=0.999)]
+###
+# This identification of blacklist regions follows the methodology of the original ENCODE ChIPseq
+# blacklist, selecting high-signal regions based on their median normalized value accross samples.
+# This script saves both the top 1% and top 0.1% bins (for both greenlist and blacklist), so
+# the extension step can be performed as described in the manuscript.
+###
 
 
-write.table(q_entropy,file='4.Calculos/all_qnorm_ents.tsv',quote=F,sep='\t')
-write.table(q_norm,file='4.Calculos/q_norm_allbins.tsv',quote=F,sep='\t')
-write.table(top1,file='4.Calculos/top_1p_ents.tsv',quote=F,sep='\t')
-write.table(top0.1,file='4.Calculos/top_0.1p_ents.tsv',quote=F,sep='\t')
-write.table(bl1,file='4.Calculos/bl_top_1.tsv',quote=F,sep='\t')
-write.table(bl0.1,file='4.Calculos/bl_top_0.1.tsv',quote=F,sep='\t')
+write.table(entropy_vals,file='') #Output file
+write.table(gl_1,file='') #Output file
+write.table(gl_0.1,file='') #Output file
+write.table(bl_1,file='') #Output file
+write.table(bl_0.1,file='') #Output file
 
 
 ######################################################
-# Plotting
+# Example plotting (optional)
 
-# plot_ent = rbind(data.frame(Entropy=q_entropy,Norm='quant'),data.frame(Entropy=cpm_entropy,Norm='cpm'))
-# 
-# ggplot(plot_ent,aes(Entropy,Group=Norm,color=Norm)) +
-#  geom_density() + 
-#  scale_x_continuous(limits=c(5,6.5))
-# 
+# Distribution of entropy values. Refers to figure 2a of our manuscript
 ggplot(data.frame(q_norm),aes(q_norm)) +
-  geom_density() +
-  scale_x_continuous(limits=c(3,5.5))
+  geom_density()
+#
 
-
-
-##########################################################################
-# Default single plot
-
-frac = 1
-n = 950
+# Calculation of sample correlation versus entropy threshold. Refers to figure 2b of our manuscript
+n = 1
 steps = 1000
 corr_curve = NULL
-while ((n/steps)<=frac) {
-  th = quantile(q_entropy,probs = (1-(n/steps)),na.rm=T)
-  new_ent = q_entropy[q_entropy>=th]
+while ((n/steps)<=1) {
+  th = quantile(entropy_vals,probs = (1-(n/steps)),na.rm=T)
+  new_ent = entropy_vals[entropy_vals>=th]
   if (length(new_ent)>1) {
     res = cor(data.frame(q_norm[names(new_ent),]),method="pearson",use="pairwise.complete.obs")
     if (is.null(corr_curve)==T){
@@ -79,10 +83,7 @@ while ((n/steps)<=frac) {
   n = n+1
 }
 
-
-ggplot(corr_curve,aes(Percentage,Med_corr,color=Percentage))+
+ggplot(corr_curve,aes(Percentage,Med_corr))+
   geom_point(size=0.5) +
-  scale_x_continuous(limits = c(0,0.1)) + 
   scale_y_continuous(name = 'Median correlation')
-
-write.table(corr_curve,file='6.Calculos/ML_entropy_corr_graph.tsv',quote=F,sep='\t')
+#
