@@ -16,4 +16,5 @@ The greenlist is devised to be flexible – we focused on reporting that these r
 consistent noise profiles, consistent enough to be used as normalizers. However, the exact
 approach on how to use them is up to the reader's preference.
 
-For our manuscript, we chose to quantify the read pile-up on these regions using [deeptools multiBamSummary](https://deeptools.readthedocs.io/en/develop/content/tools/multiBamSummary.html), followed by calculating [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) size factors for each sample. 
+For our manuscript, we chose to quantify the read pile-up on these regions using [deeptools multiBamSummary](https://deeptools.readthedocs.io/en/develop/content/tools/multiBamSummary.html), followed by calculating [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) size factors for each sample. These 
+size factors could then be used along the DESeq2 analysis pipeline.
