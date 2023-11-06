@@ -1,6 +1,6 @@
 # Load required libraries
 library(broman)
-library(entropy_valsropy)
+library(entropy)
 library(ggplot2)
 library(DESeq2)
 
@@ -8,10 +8,10 @@ library(DESeq2)
 
 # Input data
 raw_counts <- read.delim(file='')
-# Assumes bin count input as described in 'norm+entropy_valsropy.R'
+# Assumes bin count input as described in 'norm+entropy.R'
 
 entropy_vals <- read.delim(file='')
-# Assumes input as named vector of bin entropies, as calculated in 'norm+entropy_valsropy.R'. Vector
+# Assumes input as named vector of bin entropies, as calculated in 'norm+entropy.R'. Vector
 # names must match row names of 'raw_counts'
 
 meta <- read.delim(file='')
@@ -64,9 +64,9 @@ for (i in t_range) {
 # Example plotting (optional)
                            
 graph_entropy_vals$Group = factor(graph_entropy_vals$Group,levels=c("Non-normalized","Default DESeq","10%","5%","4%","2%","1%","0.5%","0.25%","0.1%","0.05%","0.04%","0.03%","0.02%","0.01%","0.005%","0.001%"))
-ggplot(graph_entropy_vals, aes(Group, entropy_valsropy,fill=Group)) +
+ggplot(graph_entropy_vals, aes(Group, entropy,fill=Group)) +
   geom_boxplot(outlier.shape = NA,show.legend = F) +
-  theme(axis.text.x = elementropy_vals_text(angle = 45, hjust=1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
   scale_fill_manual(values=c('#363636','#A3A3A3',
                              '#440154FF','#481D6FFF','#453581FF','#3D4D8AFF',
                              '#34618DFF','#2B748EFF','#24878EFF','#1F998AFF',
