@@ -1,6 +1,6 @@
 # CUT-RUN greenlist
 
-This repository houses the supporting data for the CUT&RUN/Cut&Tag Greenlist, by Mello et al.:
+This repository houses the supporting data for the CUT&RUN/Cut&Tag Greenlist, by de Mello et al.:
 
 *The CUT&RUN Greenlist: genomic regions of consistent noise are effective normalizing factors for quantitative epigenome mapping
 Fabio N. de Mello, Ana C. Tahira, Maria Gabriela Berzoti-Coelho, Sergio Verjovski-Almeida
