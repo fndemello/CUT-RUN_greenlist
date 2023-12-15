@@ -1,11 +1,25 @@
-# Load required libraries
+# Install/Load required Libraries
+pacs <- c("ggplot2", "broman", "entropy", "reshape2")
+             
+if(sum(as.numeric(!pacs %in% installed.packages())) != 0){
+  ins <- pacs[!pacs %in% installed.packages()]
+  for(i in 1:length(ins)) {
+    install.packages(ins, dependencies = T)
+    break()}
+  sapply(pacs, require, character = T) 
+} else {
+  sapply(pacs, require, character = T) 
+}
+
 library(broman)
 library(entropy)
 library(ggplot2)
+library(reshape2)
 
+args = commandArgs(trailingOnly=TRUE)
 
 # Input bin counts
-raw_counts <- read.delim(file='') #Input file
+raw_counts <- read.delim(file=args[1], row.names=1) #Input file
 ###
 # This script assumes that binning and sample quantification has already been previously performed;
 # formatting should feature rows as independent bins, and columns as samples. Counts should be
@@ -18,9 +32,9 @@ raw_counts <- read.delim(file='') #Input file
 q_norm = broman::normalize(raw_counts)
 colnames(q_norm) = colnames(raw_counts)
 rownames(q_norm) = rownames(raw_counts)
-q_norm = write.table(q_norm,
-                    file='', #Output file
-                    quote=F,sep='\t')
+write.table(q_norm,
+            file=paste(args[2], "-norm-entropy.txt", sep = ""), #Output file
+            quote=F,sep='\t')
 # Saves the quantile normalized values, if desired. Can be skipped.
 
 
@@ -50,19 +64,23 @@ gl_0.1=entropy_vals[entropy_vals>=quantile(entropy_vals,probs=0.999)]
 ###
 
 
-write.table(entropy_vals,file='') #Output file
-write.table(gl_1,file='') #Output file
-write.table(gl_0.1,file='') #Output file
-write.table(bl_1,file='') #Output file
-write.table(bl_0.1,file='') #Output file
+write.table(entropy_vals, file = paste (args[2], "-entropy.txt", sep = "")) #Output file
+write.table(gl_1, file = paste (args[2], "-entropy-gl-1.txt", sep = "")) #Output file
+write.table(gl_0.1, file = paste (args[2], "-entropy-gl-0.1.txt", sep = "")) #Output file
+write.table(bl_1,file=paste (args[2], "-entropy-bl-1.txt", sep = "")) #Output file
+write.table(bl_0.1,file=paste (args[2], "-entropy-bl-0.1.txt", sep = "")) #Output file
 
 
 ######################################################
 # Example plotting (optional)
 
+pdf (paste(args[2], "-rplot.pdf", sep = ""))
+
 # Distribution of entropy values. Refers to figure 2a of our manuscript
-ggplot(data.frame(q_norm),aes(q_norm)) +
-  geom_density()
+tmp <- melt (q_norm)
+ggplot(data.frame(tmp),aes(x = value)) +
+  geom_density() + 
+  theme_minimal()
 #
 
 # Calculation of sample correlation versus entropy threshold. Refers to figure 2b of our manuscript
@@ -86,4 +104,6 @@ while ((n/steps)<=1) {
 ggplot(corr_curve,aes(Percentage,Med_corr))+
   geom_point(size=0.5) +
   scale_y_continuous(name = 'Median correlation')
+
+dev.off()
 #
