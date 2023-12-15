@@ -1,0 +1,512 @@
+scale_x_continuous(breaks = c(1.5,3.5,5.5,7.5), labels= c("Bottom region", "Middle region", "Roof region", "Upper region"))+
+theme_classic() +
+theme (legend.title = element_blank(),
+legend.text = element_text(face=2, colour = "black", size = 10),
+legend.position = "top",
+axis.text = element_text(face = 2, colour = "black", size = 14)) -> p
+ggplot (plan, aes (x = order, y = value , color = variable, shape = variable)) +
+geom_point() +
+scale_color_manual(values = c("gray40", "black")) +
+scale_shape_manual(values = c(19 , 15)) +
+scale_x_continuous(breaks = c(1.5,3.5,5.5,7.5), labels= c("Bottom region", "Middle region", "Roof region", "Upper region"))+
+theme_classic() +
+theme (legend.title = element_blank(),
+legend.text = element_text(face=2, colour = "black", size = 10),
+legend.position = "top",
+axis.text = element_text(face = 2, colour = "black", size = 14)) -> p
+p
+p + stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),
+geom="errorbar", color=rep(c("gray40", "black"), each=4), width=0.2) +
+stat_summary(fun.y=mean, geom="point", color=rep(c("gray40", "black"), each=4), size=3) +
+coord_flip() +
+ylab("Number of holes (CI 95%)") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+read.delim("Dano Conico X retangular.txt") -> plan
+head(plan)
+melt(plan) -> plan
+sapply(strsplit(as.character(plan$variable), "\\."), function (x) paste(head(x, 2), collapse = " ")) -> plan$variable
+as.factor(plan$variable) -> plan$variable
+as.factor(plan$X) -> plan$X
+plan$X1 <- paste (plan$X, plan$variable , sep = "\n")
+as.data.frame(unique(plan$X1)[order(unique(plan$X1))]) -> info
+colnames(info) <- "X1"
+info
+info$order <- c(seq(1,4), 7, 8, 5 ,6)
+info
+merge(plan, info, by="X1") -> plan
+ggplot (plan, aes (x = value, y = order , color = variable, shape = variable)) +
+geom_point() +
+scale_color_manual(values = c("gray40", "black")) +
+scale_shape_manual(values = c(19 , 15)) +
+scale_y_continuous(breaks = c(1.5,3.5,5.5,7.5), labels= c("Bottom region", "Middle region", "Upper region", "Roof region"))+
+theme_classic() +
+theme (legend.title = element_blank(),
+legend.text = element_text(face=2, colour = "black", size = 10),
+legend.position = "top",
+axis.text = element_text(face = 2, colour = "black", size = 14),
+axis.title.y = element_blank(),
+axis.title.x = element_text(face=2, colour = "black", size = 14)) +
+xlab("Number of holes") -> p
+ggplot (plan, aes (x = order, y = value , color = variable, shape = variable)) +
+geom_point() +
+scale_color_manual(values = c("gray40", "black")) +
+scale_shape_manual(values = c(19 , 15)) +
+scale_x_continuous(breaks = c(1.5,3.5,5.5,7.5), labels= c("Bottom region", "Middle region", "Roof region", "Upper region"))+
+theme_classic() +
+theme (legend.title = element_blank(),
+legend.text = element_text(face=2, colour = "black", size = 10),
+legend.position = "top",
+axis.text = element_text(face = 2, colour = "black", size = 14)) -> p
+info
+ggplot (plan, aes (x = order, y = value , color = variable, shape = variable)) +
+geom_point() +
+scale_color_manual(values = c("gray40", "black")) +
+scale_shape_manual(values = c(19 , 15)) +
+scale_x_continuous(breaks = c(1.5,3.5,5.5,7.5), labels= c("Bottom region", "Middle region", "Upper region", "Roof region"))+
+theme_classic() +
+theme (legend.title = element_blank(),
+legend.text = element_text(face=2, colour = "black", size = 10),
+legend.position = "top",
+axis.text = element_text(face = 2, colour = "black", size = 14)) -> p
+p + stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),
+geom="errorbar", color=rep(c("gray40", "black"), each=4), width=0.2) +
+stat_summary(fun.y=mean, geom="point", color=rep(c("gray40", "black"), each=4), size=3) +
+coord_flip() +
+ylab("Number of holes (CI 95%)") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+?mean_sdl
+p + stat_summary(fun.data=mean_sdl, fun.args = list(mult=2),
+geom="errorbar", color=rep(c("gray40", "black"), each=4), width=0.2) +
+stat_summary(fun.y=mean, geom="point", color=rep(c("gray40", "black"), each=4), size=3) +
+coord_flip() +
+ylab("Number of holes (CI 95%)") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+p + stat_summary(fun.data=mean_sdl, fun.args = list(mult=0),
+geom="errorbar", color=rep(c("gray40", "black"), each=4), width=0.2) +
+stat_summary(fun.y=mean, geom="point", color=rep(c("gray40", "black"), each=4), size=3) +
+coord_flip() +
+ylab("Number of holes (CI 95%)") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+p + stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),
+geom="errorbar", color=rep(c("gray40", "black"), each=4), width=0.2) +
+stat_summary(fun.y=mean, geom="point", color=rep(c("gray40", "black"), each=4), size=3) +
+coord_flip() +
+ylab("Number of holes (CI 95%)") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+p + stat_summary(fun.data=mean_sdl, fun.args = list(mult=2),
+geom="errorbar", color=rep(c("gray40", "black"), each=4), width=0.2) +
+stat_summary(fun.y=mean, geom="point", color=rep(c("gray40", "black"), each=4), size=3) +
+coord_flip() +
+ylab("Number of holes (CI 95%)") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+p + stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),
+geom="errorbar", color=rep(c("gray40", "black"), each=4), width=0.2) +
+stat_summary(fun.y=mean, geom="point", color=rep(c("gray40", "black"), each=4), size=3) +
+coord_flip() +
+ylab("Number of holes (CI 95%)") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+p + stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),
+geom="errorbar", color=rep(c("gray40", "black"), each=4), width=0.2) +
+stat_summary(fun.y=mean, geom="point", color=rep(c("gray40", "black"), each=4), size=3) +
+coord_flip() +
+ylab("Number of holes (Mean CI 95%)") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+tiff ("R-plot-version1.tiff", width = 1500, height = 1300,
+units = "px", res = 300, compression = "lzw")
+p + stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),
+geom="errorbar", color=rep(c("gray40", "black"), each=4), width=0.2) +
+stat_summary(fun.y=mean, geom="point", color=rep(c("gray40", "black"), each=4), size=3) +
+coord_flip() +
+ylab("Number of holes (Mean CI 95%)") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+dev.off()
+p + coord_flip() +
+ylab("Number of holes (Mean CI 95%)")
+p + coord_flip() +
+ylab("Number of holes (Mean CI 95%)") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+p + coord_flip() +
+ylab("Number of holes") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+dev.off()
+tiff ("R-plot-version1.tiff", width = 1500, height = 1300,
+units = "px", res = 300, compression = "lzw")
+p + coord_flip() +
+ylab("Number of holes") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+dev.off()
+tiff ("R-plot-version2.tiff", width = 1500, height = 1300,
+units = "px", res = 300, compression = "lzw")
+p + stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),
+geom="errorbar", color=rep(c("gray40", "black"), each=4), width=0.2) +
+stat_summary(fun.y=mean, geom="point", color=rep(c("gray40", "black"), each=4), size=3) +
+coord_flip() +
+ylab("Number of holes (Mean CI 95%)") +
+theme (axis.title.x = element_text(face=2, colour = "black", size = 14),
+axis.title.y = element_blank())
+dev.off()
+0.92635729932992/1.33398913322514
+0.811559323972038/1.28295978074078
+1.06753570343058/1.20752816242092
+packages <- c("ggplot2", "broman", "entropy")
+for (i in packages) {
+if (!require(i)) {
+install.packages(i)
+library(i)
+}
+}
+install.packages(i)
+i
+get(i)
+packages <- c("ggplot2", "broman", "entropy")
+for (i in packages) {
+if (!require(paste("\"",i, "\"", sep = ""))) {
+install.packages(i)
+library(i)
+}
+}
+install.packages(i)
+# Load required libraries
+library(broman)
+library(entropy)
+library(ggplot2)
+setwd("~/Documents/Programs/CUT-RUN_greenlist/")
+# Input bin counts
+raw_counts <- read.delim(file="Examples/peaks/glist_quant.tsv") #Input file
+head(raw_counts)
+# Quantile normalize
+q_norm = broman::normalize(raw_counts)
+# Input bin counts
+raw_counts <- read.delim(file="Examples/peaks/glist_quant.tsv", row.names = 1) #Input file
+# Quantile normalize
+q_norm = broman::normalize(raw_counts)
+colnames(q_norm) = colnames(raw_counts)
+rownames(q_norm) = rownames(raw_counts)
+# Input bin counts
+raw_counts <- read.delim(file="Examples/peaks/glist_quant.tsv", row.names=1) #Input file
+# Quantile normalize
+q_norm = broman::normalize(raw_counts)
+colnames(q_norm) = colnames(raw_counts)
+rownames(q_norm) = rownames(raw_counts)
+args() <- c("Examples/peaks/glist_quant.tsv", "Examples/results/Teste")
+args <- c("Examples/peaks/glist_quant.tsv", "Examples/results/Teste")
+# Input bin counts
+raw_counts <- read.delim(file=args[1], row.names=1) #Input file
+# Quantile normalize
+q_norm = broman::normalize(raw_counts)
+colnames(q_norm) = colnames(raw_counts)
+rownames(q_norm) = rownames(raw_counts)
+q_norm = write.table(q_norm,
+file=paste(args[2], "-norm-entropy.txt", sep = ""), #Output file
+quote=F,sep='\t')
+# Calculate Shannon entropy for each bin across all samples
+entropy_vals = apply(q_norm,1,function(x) entropy(x,method='ML'))
+q_norm
+# Quantile normalize
+q_norm = broman::normalize(raw_counts)
+colnames(q_norm) = colnames(raw_counts)
+rownames(q_norm) = rownames(raw_counts)
+# Calculate Shannon entropy for each bin across all samples
+entropy_vals = apply(q_norm,1,function(x) entropy(x,method='ML'))
+summary(entropy_vals)
+# Input bin counts
+raw_counts <- read.delim(file=args[1], row.names=1) #Input file
+# Quantile normalize
+q_norm = broman::normalize(raw_counts)
+colnames(q_norm) = colnames(raw_counts)
+rownames(q_norm) = rownames(raw_counts)
+write.table(q_norm,
+file=paste(args[2], "-norm-entropy.txt", sep = ""), #Output file
+quote=F,sep='\t')
+# Calculate Shannon entropy for each bin across all samples
+entropy_vals = apply(q_norm,1,function(x) entropy(x,method='ML'))
+summary(entropy_vals)
+entropy_vals = entropy_vals[!is.na(entropy_vals)]
+# Save files
+blist = apply(q_norm,1,function(x) median(x))
+bl_1 = blist[blist>=quantile(blist,probs=0.99)]
+bl_0.1 = blist[blist>=quantile(blist,probs=0.999)]
+gl_1=entropy_vals[entropy_vals>=quantile(entropy_vals,probs=0.99)]
+gl_0.1=entropy_vals[entropy_vals>=quantile(entropy_vals,probs=0.999)]
+write.table(entropy_vals,file=paste (args[2], "-entropy.txt", sep "")) #Output file
+args[2]
+write.table(entropy_vals, file = paste (args[2], "-entropy.txt", sep = "")) #Output file
+write.table(gl_1, file = paste (args[2], "-entropy-gl-1.txt", sep = "")) #Output file
+write.table(gl_0.1, file = paste (args[2], "-entropy-gl-0.1.txt", sep = "")) #Output file
+write.table(bl_1,file=paste (args[2], "-entropy-bl-1.txt", sep = "")) #Output file
+write.table(bl_0.1,file=paste (args[2], "-entropy-bl-0.1.txt", sep = "")) #Output file
+pdf (paste(args[2], "-rplot.pdf", sep = ""))
+# Distribution of entropy values. Refers to figure 2a of our manuscript
+ggplot(data.frame(q_norm),aes(q_norm)) +
+geom_density()
+dev.off()
+# Distribution of entropy values. Refers to figure 2a of our manuscript
+ggplot(data.frame(q_norm),aes(q_norm)) +
+geom_density()
+q_norm
+# Distribution of entropy values. Refers to figure 2a of our manuscript
+ggplot(data.frame(q_norm),aes(x = q_norm)) +
+geom_density()
+# Calculation of sample correlation versus entropy threshold. Refers to figure 2b of our manuscript
+n = 1
+steps = 1000
+corr_curve = NULL
+while ((n/steps)<=1) {
+th = quantile(entropy_vals,probs = (1-(n/steps)),na.rm=T)
+new_ent = entropy_vals[entropy_vals>=th]
+if (length(new_ent)>1) {
+res = cor(data.frame(q_norm[names(new_ent),]),method="pearson",use="pairwise.complete.obs")
+if (is.null(corr_curve)==T){
+corr_curve = data.frame(Percentage = (n/steps)*100,Min_corr = min(res[upper.tri(res)]),Q25_corr = quantile(res[upper.tri(res)],probs=0.25),Med_corr = median(res[upper.tri(res)]),Q75_corr = quantile(res[upper.tri(res)],probs=0.75),Max_corr = max(res[upper.tri(res)]))
+} else {
+corr_curve = rbind(corr_curve,data.frame(Percentage = (n/steps)*100,Min_corr = min(res[upper.tri(res)]),Q25_corr = quantile(res[upper.tri(res)],probs=0.25),Med_corr = median(res[upper.tri(res)]),Q75_corr = quantile(res[upper.tri(res)],probs=0.75),Max_corr = max(res[upper.tri(res)])))
+}
+}
+n = n+1
+}
+ggplot(corr_curve,aes(Percentage,Med_corr))+
+geom_point(size=0.5) +
+scale_y_continuous(name = 'Median correlation')
+entropy_vals
+args
+args <- c("Examples/counts/glist_quant.tsv", "Examples/results/Teste")
+# Input bin counts
+raw_counts <- read.delim(file=args[1], row.names=1) #Input file
+# Quantile normalize
+q_norm = broman::normalize(raw_counts)
+colnames(q_norm) = colnames(raw_counts)
+rownames(q_norm) = rownames(raw_counts)
+write.table(q_norm,
+file=paste(args[2], "-norm-entropy.txt", sep = ""), #Output file
+quote=F,sep='\t')
+# Calculate Shannon entropy for each bin across all samples
+entropy_vals = apply(q_norm,1,function(x) entropy(x,method='ML'))
+summary(entropy_vals)
+entropy_vals = entropy_vals[!is.na(entropy_vals)]
+# Save files
+blist = apply(q_norm,1,function(x) median(x))
+bl_1 = blist[blist>=quantile(blist,probs=0.99)]
+bl_0.1 = blist[blist>=quantile(blist,probs=0.999)]
+gl_1=entropy_vals[entropy_vals>=quantile(entropy_vals,probs=0.99)]
+gl_0.1=entropy_vals[entropy_vals>=quantile(entropy_vals,probs=0.999)]
+write.table(entropy_vals, file = paste (args[2], "-entropy.txt", sep = "")) #Output file
+write.table(gl_1, file = paste (args[2], "-entropy-gl-1.txt", sep = "")) #Output file
+write.table(gl_0.1, file = paste (args[2], "-entropy-gl-0.1.txt", sep = "")) #Output file
+write.table(bl_1,file=paste (args[2], "-entropy-bl-1.txt", sep = "")) #Output file
+write.table(bl_0.1,file=paste (args[2], "-entropy-bl-0.1.txt", sep = "")) #Output file
+# Distribution of entropy values. Refers to figure 2a of our manuscript
+ggplot(data.frame(q_norm),aes(q_norm)) +
+geom_density()
+head(q_norm)
+# Distribution of entropy values. Refers to figure 2a of our manuscript
+melt (q_norm) -> q_norm
+head(q_norm)
+ggplot(data.frame(q_norm),aes(x = value)) +
+geom_density()
+min(q_norm$value)
+max(q_norm$value)
+ggplot(data.frame(q_norm),aes(x = value)) +
+geom_density() +
+xlim (c (0,6)) +
+theme_classic()
+ggplot(data.frame(q_norm),aes(x = value)) +
+geom_density() +
+theme_classic()
+# Calculation of sample correlation versus entropy threshold. Refers to figure 2b of our manuscript
+n = 1
+steps = 1000
+corr_curve = NULL
+while ((n/steps)<=1) {
+th = quantile(entropy_vals,probs = (1-(n/steps)),na.rm=T)
+new_ent = entropy_vals[entropy_vals>=th]
+if (length(new_ent)>1) {
+res = cor(data.frame(q_norm[names(new_ent),]),method="pearson",use="pairwise.complete.obs")
+if (is.null(corr_curve)==T){
+corr_curve = data.frame(Percentage = (n/steps)*100,Min_corr = min(res[upper.tri(res)]),Q25_corr = quantile(res[upper.tri(res)],probs=0.25),Med_corr = median(res[upper.tri(res)]),Q75_corr = quantile(res[upper.tri(res)],probs=0.75),Max_corr = max(res[upper.tri(res)]))
+} else {
+corr_curve = rbind(corr_curve,data.frame(Percentage = (n/steps)*100,Min_corr = min(res[upper.tri(res)]),Q25_corr = quantile(res[upper.tri(res)],probs=0.25),Med_corr = median(res[upper.tri(res)]),Q75_corr = quantile(res[upper.tri(res)],probs=0.75),Max_corr = max(res[upper.tri(res)])))
+}
+}
+n = n+1
+}
+# Quantile normalize
+q_norm = broman::normalize(raw_counts)
+colnames(q_norm) = colnames(raw_counts)
+rownames(q_norm) = rownames(raw_counts)
+# Calculation of sample correlation versus entropy threshold. Refers to figure 2b of our manuscript
+n = 1
+steps = 1000
+corr_curve = NULL
+while ((n/steps)<=1) {
+th = quantile(entropy_vals,probs = (1-(n/steps)),na.rm=T)
+new_ent = entropy_vals[entropy_vals>=th]
+if (length(new_ent)>1) {
+res = cor(data.frame(q_norm[names(new_ent),]),method="pearson",use="pairwise.complete.obs")
+if (is.null(corr_curve)==T){
+corr_curve = data.frame(Percentage = (n/steps)*100,Min_corr = min(res[upper.tri(res)]),Q25_corr = quantile(res[upper.tri(res)],probs=0.25),Med_corr = median(res[upper.tri(res)]),Q75_corr = quantile(res[upper.tri(res)],probs=0.75),Max_corr = max(res[upper.tri(res)]))
+} else {
+corr_curve = rbind(corr_curve,data.frame(Percentage = (n/steps)*100,Min_corr = min(res[upper.tri(res)]),Q25_corr = quantile(res[upper.tri(res)],probs=0.25),Med_corr = median(res[upper.tri(res)]),Q75_corr = quantile(res[upper.tri(res)],probs=0.75),Max_corr = max(res[upper.tri(res)])))
+}
+}
+n = n+1
+}
+head(q_norm)
+head(corr_curve)
+ggplot(corr_curve,aes(Percentage,Med_corr))+
+geom_point(size=0.5) +
+scale_y_continuous(name = 'Median correlation')
+# Distribution of entropy values. Refers to figure 2a of our manuscript
+ggplot(data.frame(q_norm),aes(q_norm)) +
+geom_density() +
+theme_classic()
+# Distribution of entropy values. Refers to figure 2a of our manuscript
+tmp <- melt (q_norm)
+ggplot(data.frame(tmp),aes(x = value)) +
+geom_density() +
+theme_minimal()
+load("/home/actahira/.cache/.fr-esTomv/Análise de Cluster/Vestibular.RData")
+pacotes <- c("ggplot2", "broman", "entropy", "reshape2")
+pacs <- c("ggplot2", "broman", "entropy", "reshape2")
+pacs <- c("ggplot2", "broman", "entropy", "reshape2")
+if(sum(as.numeric(!pacs %in% installed.packages())) != 0){
+instalador <- pacs[!pacs %in% installed.packages()]
+for(i in 1:length(instalador)) {
+install.packages(instalador, dependencies = T)
+break()}
+sapply(pacs, require, character = T)
+} else {
+sapply(pacs, require, character = T)
+}
+pacs <- c("ggplot2", "broman", "entropy", "reshape2")
+if(sum(as.numeric(!pacs %in% installed.packages())) != 0){
+ins <- pacs[!pacs %in% installed.packages()]
+for(i in 1:length(ins)) {
+install.packages(ins, dependencies = T)
+break()}
+sapply(pacs, require, character = T)
+} else {
+sapply(pacs, require, character = T)
+}
+# Load required libraries
+pacs <- c("ggplot2", "broman", "entropy", "DESeq2")
+if(sum(as.numeric(!pacs %in% installed.packages())) != 0){
+ins <- pacs[!pacs %in% installed.packages()]
+for(i in 1:length(ins)) {
+install.packages(ins, dependencies = T)
+break()}
+sapply(pacs, require, character = T)
+} else {
+sapply(pacs, require, character = T)
+}
+library(broman)
+library(entropy)
+library(ggplot2)
+library(DESeq2)
+setwd()
+getwd()
+args <- c("Examples/results/Pax3FOXO1-norm-entropy.txt", "Examples/results/Pax3FOXO1-entropy.txt")
+# Input data
+raw_counts <- read.delim(file=args[1])
+entropy_vals <- read.delim(file=args[2])
+head(raw_counts)
+args
+agrs<- c(args, "Examples/results/metadata.csv")
+meta <- read.delim(file=args[3])
+args
+args <- c(args, "Examples/results/metadata.csv")
+meta <- read.delim(file=args[3])
+####
+# Process data
+target_entropy_vals = entropy_vals[entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T)]
+entropy_vals
+entropy_vals <- read.delim(file=args[2], row.names = 1)
+####
+# Process data
+target_entropy_vals = entropy_vals[entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T)]
+target_entropy_vals
+entropy_vals
+entropy_vals <- read.delim(file=args[2])
+entropy_vals
+head(entropy_vals)
+dim(entropy_vals)
+####
+# Process data
+target_entropy_vals = entropy_vals[entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T)]
+str(entropy_vals)
+entropy_vals <- read.delim(file=args[2], sep = " ", row.names = 1)
+head(entropy_vals)
+####
+# Process data
+target_entropy_vals = entropy_vals[entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T)]
+target_entropy_vals
+name(target_entropy_vals)
+names(target_entropy_vals)
+target_entropy_vals
+head(raw_counts)
+entropy_vals
+target_counts = data.frame(raw_counts[rownames(target_entropy_vals),])
+head(target_counts)
+rownames(target_entropy_vals)
+head(target_entropy_vals)
+entropy_vals[entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T)]
+head(entropy_vals)
+quantile(entropy_vals,probs = 0.1,na.rm=T)
+####
+# Process data
+target_entropy_vals = entropy_vals[entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T),]
+head(target_entropy_vals)
+entropy_vals[entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T),]
+head(entropy_vals)
+rownames(entropy_vals)
+####
+# Process data
+target_entropy_vals = entropy_vals[rownames(entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T)),]
+head(target_entropy_vals)
+entropy_vals[1:5,]
+class(entropy_vals)
+head(entropy_vals)
+entropy_vals <- read.delim(file=args[2], sep = " ")
+head(entropy_vals)
+####
+# Process data
+target_entropy_vals = entropy_vals[rownames(entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T)),]
+head(target_entropy_vals)
+####
+# Process data
+target_entropy_vals = entropy_vals[entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T)]
+head(target_entropy_vals)
+class(entropy_vals)
+names
+entropy_vals <- read.delim(file=args[2], sep = " ", col.names = F)
+head(entropy_vals)
+dim(entropy_vals)
+rownames(entropy_vals)
+entropy_vals <- t(read.delim(file=args[2], sep = " "))
+head(entropy_vals)
+####
+# Process data
+target_entropy_vals = entropy_vals[entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T)]
+target_entropy_vals
+entropy_vals
+names(entropy_vals)
+entropy_vals <- read.delim(file=args[2], sep = " ")
+####
+# Process data
+target_entropy_vals = data.frame(entropy_vals[entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T),])
+head(target_entropy_vals)
+####
+# Process data
+target_entropy_vals = entropy_vals[entropy_vals<=quantile(entropy_vals,probs = 0.1,na.rm=T)]
+entropy_vals[entropy_vals$x %in% target_entropy_vals,]
