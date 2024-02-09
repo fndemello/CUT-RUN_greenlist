@@ -2,9 +2,9 @@
 
 This repository houses the supporting data for the CUT&RUN/Cut&Tag Greenlist, by de Mello et al. 2024:
 
-*The CUT&RUN greenlist: genomic regions of consistent noise are effective normalizing factors for quantitative epigenome mapping
-Fabio N. de Mello, Ana C. Tahira, Maria Gabriela Berzoti-Coelho, Sergio Verjovski-Almeida
-Briefings in Bioinformatics, Volume 25, Issue 2, March 2024, bbad538, doi: [10.1101/2023.10.26.564165](https://doi.org/10.1101/2023.10.26.564165)*
+*The CUT&RUN greenlist: genomic regions of consistent noise are effective normalizing factors for quantitative epigenome mapping.
+Fabio N. de Mello, Ana C. Tahira, Maria Gabriela Berzoti-Coelho, Sergio Verjovski-Almeida.
+Briefings in Bioinformatics, Volume 25, Issue 2, March 2024, bbad538, doi: [10.1093/bib/bbad538](https://doi.org/10.1093/bib/bbad538)*
 
 Greenlist bedfiles are available on the main folder, and also grouped together as an Excel file in 
 Supplementary Material S1. R scripts used for greenlist construction and validatation are available 
